@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PokemonState {
   selectedPokemon: number | null;
@@ -27,9 +27,10 @@ const pokemonSlice = createSlice({
     setSelectedPokemon(state, action) {
       state.selectedPokemon = action.payload;
     },
-    toggleColumn(state, action) {
-      state.columns[action.payload] = !state.columns[action.payload];
-    },
+    toggleColumn(state, action: PayloadAction<keyof PokemonState['columns']>) {
+        const columnName = action.payload; // Now TypeScript knows this is a valid column key
+        state.columns[columnName] = !state.columns[columnName]; // Safely toggle column visibility
+      },
   },
 });
 

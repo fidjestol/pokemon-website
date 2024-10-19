@@ -1,13 +1,29 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+// Define the response structure for the Pokemon list
+interface PokemonListResponse {
+  results: Array<{ name: string; url: string }>;
+}
+
+// Define the response structure for Pokemon details
+interface PokemonDetailsResponse {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  stats: Array<{base_stat: number}>;
+  // You can add more fields as necessary
+}
+
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   endpoints: (builder) => ({
-    getPokemonList: builder.query({
+    // Explicitly define that this query does not expect any argument
+    getPokemonList: builder.query<PokemonListResponse, void>({
       query: () => 'pokemon?limit=150',
     }),
-    getPokemonDetails: builder.query({
+    getPokemonDetails: builder.query<PokemonDetailsResponse, number>({
       query: (id) => `pokemon/${id}`,
     }),
   }),
