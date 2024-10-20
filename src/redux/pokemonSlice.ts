@@ -10,14 +10,28 @@ interface PokemonState {
   };
 }
 
-const initialState: PokemonState = {
-  selectedPokemon: null,
-  columns: {
+// Helper function to load column settings from localStorage
+const loadColumnsFromLocalStorage = () => {
+  const savedColumns = localStorage.getItem('pokemon_columns');
+  if (savedColumns) {
+    return JSON.parse(savedColumns);
+  }
+  return {
     picture: true,
     weight: true,
     height: true,
     types: true,
-  },
+  }; // Default settings if none are saved
+};
+
+// Helper function to save column settings to localStorage
+const saveColumnsToLocalStorage = (columns: PokemonState['columns']) => {
+  localStorage.setItem('pokemon_columns', JSON.stringify(columns));
+};
+
+const initialState: PokemonState = {
+  selectedPokemon: null,
+  columns: loadColumnsFromLocalStorage(), // Load columns from localStorage
 };
 
 const pokemonSlice = createSlice({
@@ -30,7 +44,9 @@ const pokemonSlice = createSlice({
     toggleColumn(state, action: PayloadAction<keyof PokemonState['columns']>) {
         const columnName = action.payload; // Now TypeScript knows this is a valid column key
         state.columns[columnName] = !state.columns[columnName]; // Safely toggle column visibility
-      },
+      saveColumnsToLocalStorage(state.columns); // Save the updated column settings
+
+    },
   },
 });
 

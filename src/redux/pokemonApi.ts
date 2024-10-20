@@ -5,6 +5,10 @@ interface PokemonListResponse {
   results: Array<{ name: string; url: string }>;
 }
 
+interface PokemonSprites {
+  front_default: string | null;  // Only keep the front_default sprite
+}
+
 // Define the response structure for Pokemon details
 interface PokemonDetailsResponse {
   id: number;
@@ -12,6 +16,8 @@ interface PokemonDetailsResponse {
   height: number;
   weight: number;
   stats: Array<{base_stat: number}>;
+  sprites: PokemonSprites;
+  abilities: string[];
   // You can add more fields as necessary
 }
 

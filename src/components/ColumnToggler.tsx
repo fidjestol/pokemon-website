@@ -18,7 +18,6 @@ const ColumnToggler: React.FC = () => {
   const dispatch = useDispatch();
   const columns = useSelector((state: RootState) => state.pokemon.columns);
 
-  // Explicitly cast the result of Object.keys to keyof
   const columnKeys = Object.keys(columns) as Array<keyof typeof columns>;
 
   const handleToggle = (column: keyof typeof columns) => {
@@ -26,20 +25,20 @@ const ColumnToggler: React.FC = () => {
   };
 
   return (
-    <FormGroup>
-      {columnKeys.map((column) => (
-        <FormControlLabel
-          key={column}
-          control={
-            <Checkbox
-              checked={columns[column]}
-              onChange={() => handleToggle(column)}
+      <FormGroup row> {/* Add row prop to display checkboxes horizontally */}
+        {columnKeys.map((column) => (
+            <FormControlLabel
+                key={column}
+                control={
+                  <Checkbox
+                      checked={columns[column]}
+                      onChange={() => handleToggle(column)}
+                  />
+                }
+                label={column.charAt(0).toUpperCase() + column.slice(1)}
             />
-          }
-          label={column.charAt(0).toUpperCase() + column.slice(1)}
-        />
-      ))}
-    </FormGroup>
+        ))}
+      </FormGroup>
   );
 };
 
