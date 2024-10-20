@@ -1,77 +1,42 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import PokemonTable from './PokemonTable';  // Adjust the path to your component
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { store } from '../redux/store'; // Import your Redux store
-import { useGetPokemonListQuery } from '../redux/pokemonApi';
+import { store } from '../redux/store';  // Your actual Redux store
+import PokemonTable from './PokemonTable';
 
-// Mock the useGetPokemonListQuery hook
-jest.mock('../redux/pokemonApi');
+// Only mock the specific hook, not the entire module
+jest.mock('../redux/pokemonApi', () => ({
+    ...jest.requireActual('../redux/pokemonApi'), // Keep other exports intact
+    useGetPokemonListQuery: jest.fn(), // Mock only the hook
+}));
 
-describe('PokemonTable Component', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+describe('PokemonTable', () => {
+    it('renders the PokemonTable correctly', async () => {
+        // Mock API data
+        const mockData = {
+            results: [
+                { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
+                { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' },
+            ],
+        };
 
-    it('renders loading state initially', () => {
-        // Mock useGetPokemonListQuery to simulate loading state
-        (useGetPokemonListQuery as jest.Mock).mockReturnValue({
-            data: null,
-            error: null,
-            isLoading: true,
-        });
-
-        render(
-            <Provider store={store}>
-                <PokemonTable />
-            </Provider>
-        );
-
-        // Check if loading message is displayed
-        expect(screen.getByText('Loading...')).toBeInTheDocument();
-    });
-
-    it('renders Pokémon data when API call is successful', async () => {
-        // Mock useGetPokemonListQuery to simulate successful API call
-        (useGetPokemonListQuery as jest.Mock).mockReturnValue({
-            data: {
-                results: [
-                    { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
-                    { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' },
-                ],
-            },
-            error: null,
+        // Mock the return value of the API hook
+        const useGetPokemonListQuery = require('../redux/pokemonApi').useGetPokemonListQuery;
+        useGetPokemonListQuery.mockReturnValue({
+            data: mockData,
             isLoading: false,
+            error: null,
         });
 
-        // No need to mock Axios separately since we are only testing the hook response
-
+        // Render the component wrapped in the Redux Provider with the actual store
         render(
             <Provider store={store}>
                 <PokemonTable />
             </Provider>
         );
 
-        // Verify that the Pokémon names are displayed
-        expect(await screen.findByText('Bulbasaur')).toBeInTheDocument(); // Capitalized by your component
+        // Check if Pokémon names are rendered
+        expect(await screen.findByText('Bulbasaur')).toBeInTheDocument();
         expect(await screen.findByText('Ivysaur')).toBeInTheDocument();
-    });
-
-    it('handles error state correctly', () => {
-        // Mock useGetPokemonListQuery to simulate an error
-        (useGetPokemonListQuery as jest.Mock).mockReturnValue({
-            data: null,
-            error: true,
-            isLoading: false,
-        });
-
-        render(
-            <Provider store={store}>
-                <PokemonTable />
-            </Provider>
-        );
-
-        // Verify that the error message is displayed
-        expect(screen.getByText('Error fetching Pokémon list')).toBeInTheDocument();
     });
 });

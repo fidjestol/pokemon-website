@@ -5,7 +5,7 @@ import ColumnToggler from './components/ColumnToggler';
 
 function App() {
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
+        <div style={{ display: 'flex', height: '95vh' }}>
             {/* Left Column (Column Toggler and Table) */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '10px' }}>
                 <ColumnToggler />
