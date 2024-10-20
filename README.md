@@ -58,25 +58,25 @@ Before you begin, ensure you have the following installed on your machine:
 ### Installation
 
 1. **Clone the repository:**
-   \`\`\`bash
+   ```bash
    git clone https://github.com/your-username/pokemon-info-app.git
    cd pokemon-info-app
-   \`\`\`
+   ```
 
 2. **Install dependencies:**
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 ### Running the App
 
 To run the application in development mode:
 
-\`\`\`bash
+```bash
 npm start
-\`\`\`
+```
 
-This will start the app on \`http://localhost:3000/\`. Open this URL in your browser to view the application.
+This will start the app on `http://localhost:3000/`. Open this URL in your browser to view the application.
 
 ---
 
@@ -84,7 +84,7 @@ This will start the app on \`http://localhost:3000/\`. Open this URL in your bro
 
 The project follows a standard React-Redux folder structure:
 
-\`\`\`
+```
 src/
 │
 ├── components/          # React components
@@ -103,7 +103,7 @@ src/
 ├── App.tsx              # Main application component
 ├── index.tsx            # Application entry point
 └── setupTests.ts        # Jest and Testing Library setup
-\`\`\`
+```
 
 ---
 
@@ -111,16 +111,16 @@ src/
 
 The application uses **RTK Query** to fetch Pokémon data from the [PokeAPI](https://pokeapi.co/):
 
-- **Endpoint:** \`/pokemon?limit=150\` – Retrieves the list of the first 150 Pokémon.
-- **Endpoint:** \`/pokemon/{id}\` – Fetches detailed information for a specific Pokémon by its ID.
+- **Endpoint:** `/pokemon?limit=150` – Retrieves the list of the first 150 Pokémon.
+- **Endpoint:** `/pokemon/{id}` – Fetches detailed information for a specific Pokémon by its ID.
 
 ### Example API Call:
-\`\`\`ts
+```ts
 import { useGetPokemonListQuery, useGetPokemonDetailsQuery } from './redux/pokemonApi';
 
 // Fetch list of Pokémon
 const { data, error, isLoading } = useGetPokemonListQuery();
-\`\`\`
+```
 
 ---
 
@@ -132,15 +132,15 @@ This project uses **Jest** and **React Testing Library** for unit and integratio
 
 To run the test suite:
 
-\`\`\`bash
+```bash
 npm test
-\`\`\`
+```
 
 ### Example Test
 
-An example of how a test looks for the \`PokemonTable\` component:
+An example of how a test looks for the `PokemonTable` component:
 
-\`\`\`ts
+```ts
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -155,7 +155,7 @@ test('renders the Pokémon table correctly', () => {
   
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });
-\`\`\`
+```
 
 ---
 
