@@ -1,46 +1,170 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Pokémon Information Application
 
-## Available Scripts
+This is a simple web application that allows users to view basic and detailed information about Pokémon. The data is retrieved from the [PokeAPI](https://pokeapi.co/). The application is built using **React**, **Redux**, **TypeScript**, and **Material UI** for the front-end.
 
-In the project directory, you can run:
+## Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the App](#running-the-app)
+- [Project Structure](#project-structure)
+- [API Integration](#api-integration)
+- [Testing](#testing)
+- [License](#license)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Pokémon List:** Displays a dynamic table with the following Pokémon information:
+  - Name
+  - ID
+  - Picture
+  - Weight
+  - Height
+  - Types
 
-### `npm test`
+- **Customizable Columns:** Users can toggle the visibility of columns in the Pokémon table. The visibility preferences persist across page reloads.
+  
+- **Detailed Pokémon Information:** Clicking on a Pokémon row or using arrow keys to navigate shows detailed stats about the selected Pokémon (HP, Attack, Defense, etc.).
+  
+- **Responsive Layout:** The application adjusts to various screen sizes, with a sidebar for Pokémon details.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React**: For building the UI.
+- **Redux Toolkit**: For state management.
+- **RTK Query**: For data fetching and caching.
+- **Material UI (MUI)**: For UI components and styling.
+- **TypeScript**: For static type checking.
+- **Axios**: For API requests.
+- **Jest & React Testing Library**: For unit testing and integration testing.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+### Prerequisites
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Before you begin, ensure you have the following installed on your machine:
+- **Node.js** (version 14.x or higher)
+- **npm** (Node package manager)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. **Clone the repository:**
+   \`\`\`bash
+   git clone https://github.com/your-username/pokemon-info-app.git
+   cd pokemon-info-app
+   \`\`\`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+2. **Install dependencies:**
+   \`\`\`bash
+   npm install
+   \`\`\`
 
-## Learn More
+### Running the App
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To run the application in development mode:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+\`\`\`bash
+npm start
+\`\`\`
+
+This will start the app on \`http://localhost:3000/\`. Open this URL in your browser to view the application.
+
+---
+
+## Project Structure
+
+The project follows a standard React-Redux folder structure:
+
+\`\`\`
+src/
+│
+├── components/          # React components
+│   ├── PokemonTable.tsx  # Component for displaying the Pokémon table
+│   ├── PokemonDetails.tsx # Component for displaying selected Pokémon details
+│   └── ColumnToggler.tsx # Component for toggling table columns
+│
+├── redux/               # Redux store setup
+│   ├── pokemonApi.ts    # RTK Query API slice
+│   ├── pokemonSlice.ts  # Redux slice for selected Pokémon and table columns
+│   └── store.ts         # Redux store configuration
+│
+├── tests/               # Unit and integration tests
+│   └── PokemonTable.test.tsx
+│
+├── App.tsx              # Main application component
+├── index.tsx            # Application entry point
+└── setupTests.ts        # Jest and Testing Library setup
+\`\`\`
+
+---
+
+## API Integration
+
+The application uses **RTK Query** to fetch Pokémon data from the [PokeAPI](https://pokeapi.co/):
+
+- **Endpoint:** \`/pokemon?limit=150\` – Retrieves the list of the first 150 Pokémon.
+- **Endpoint:** \`/pokemon/{id}\` – Fetches detailed information for a specific Pokémon by its ID.
+
+### Example API Call:
+\`\`\`ts
+import { useGetPokemonListQuery, useGetPokemonDetailsQuery } from './redux/pokemonApi';
+
+// Fetch list of Pokémon
+const { data, error, isLoading } = useGetPokemonListQuery();
+\`\`\`
+
+---
+
+## Testing
+
+This project uses **Jest** and **React Testing Library** for unit and integration testing.
+
+### Running Tests
+
+To run the test suite:
+
+\`\`\`bash
+npm test
+\`\`\`
+
+### Example Test
+
+An example of how a test looks for the \`PokemonTable\` component:
+
+\`\`\`ts
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import PokemonTable from './PokemonTable';
+
+test('renders the Pokémon table correctly', () => {
+  render(
+    <Provider store={store}>
+      <PokemonTable />
+    </Provider>
+  );
+  
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+});
+\`\`\`
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Additional Information
+
+If you encounter any issues or have questions, feel free to create an issue on the [GitHub repository](https://github.com/your-username/pokemon-info-app/issues) or reach out to the project maintainer.
